@@ -7,6 +7,10 @@ public class CartaoResponseListener {
     private UUID id;
     private String email;
 
+    public Cartao toCartao(){
+        return new Cartao(this.id, this.email);
+    }
+
     public UUID getId() {
         return id;
     }
@@ -23,11 +27,4 @@ public class CartaoResponseListener {
         this.email = email;
     }
 
-    @Override
-    public String toString() {
-        return "CartaoResponseListener{" +
-                "id=" + id +
-                ", email='" + email + '\'' +
-                '}';
-    }
 }

@@ -6,6 +6,10 @@ public class EstabelecimentoResponseListener {
     private String cidade;
     private String endereco;
 
+    public Estabelecimento toEstabelecimento(){
+        return new Estabelecimento(this.nome, this.cidade, this.endereco);
+    }
+
     public String getNome() {
         return nome;
     }
@@ -30,12 +34,4 @@ public class EstabelecimentoResponseListener {
         this.endereco = endereco;
     }
 
-    @Override
-    public String toString() {
-        return "EstabelecimentoResponseListener{" +
-                "nome='" + nome + '\'' +
-                ", cidade='" + cidade + '\'' +
-                ", endereco='" + endereco + '\'' +
-                '}';
-    }
 }

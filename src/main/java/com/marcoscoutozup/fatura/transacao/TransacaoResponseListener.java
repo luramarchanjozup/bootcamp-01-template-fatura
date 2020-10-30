@@ -15,6 +15,10 @@ public class TransacaoResponseListener {
     private CartaoResponseListener cartao;
     private LocalDateTime efetivadaEm;
 
+    public Transacao toTransacao(){
+        return new Transacao(this.id, this.valor, this.estabelecimento.toEstabelecimento(), this.efetivadaEm);
+    }
+
     public UUID getId() {
         return id;
     }
@@ -55,14 +59,4 @@ public class TransacaoResponseListener {
         this.efetivadaEm = efetivadaEm;
     }
 
-    @Override
-    public String toString() {
-        return "TransacaoResponseListener{" +
-                "id=" + id +
-                ", valor=" + valor +
-                ", estabelecimento=" + estabelecimento +
-                ", cartao=" + cartao +
-                ", efetivadaEm=" + efetivadaEm +
-                '}';
-    }
 }
