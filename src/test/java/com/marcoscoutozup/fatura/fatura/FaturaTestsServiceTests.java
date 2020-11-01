@@ -9,7 +9,7 @@ import org.mockito.Mock;
 
 import javax.persistence.EntityManager;
 
-public class FaturaServiceTests {
+public class FaturaTestsServiceTests {
 
     private FaturaService faturaService;
 

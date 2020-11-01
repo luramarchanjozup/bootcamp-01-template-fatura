@@ -25,4 +25,8 @@ public class Estabelecimento {
         this.endereco = endereco;
     }
 
+    public EstabelecimentoResponse toResponse(){
+        return new EstabelecimentoResponse(this.nome, this.cidade, this.endereco);
+    }
+
 }

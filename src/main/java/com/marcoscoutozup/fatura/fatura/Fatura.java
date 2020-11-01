@@ -6,6 +6,7 @@ import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -42,6 +43,17 @@ public class Fatura {
     public void adicionarTransacaoNaFatura(Transacao transacao){
         Assert.notNull(transacao, "A transação para ser adicionada na fatura não pode ser nula ");
         this.transacoes.add(transacao);
+    }
+
+    public BigDecimal calcularTotalDaFatura(){
+        Assert.notNull(transacoes, "As lista de transações não pode ser nula para calcular o total da fatura");
+        return transacoes.stream()
+                .map(transacao -> transacao.retornarValorDaTransacao())
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public FaturaResponse toResponse(){
+        return new FaturaResponse(this.mesCorrespondente, Transacao.toResponseSet(transacoes), calcularTotalDaFatura());
     }
 
 }
