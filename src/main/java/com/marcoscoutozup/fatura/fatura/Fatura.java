@@ -7,9 +7,11 @@ import org.springframework.util.Assert;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Entity
 @NamedQuery(name = "findFaturaByCartaoAndMesCorrente",
@@ -56,4 +58,11 @@ public class Fatura {
         return new FaturaResponse(this.mesCorrespondente, Transacao.toResponseSet(transacoes), calcularTotalDaFatura());
     }
 
+    public BigDecimal calcularSaldoDoCartao(BigDecimal limite){
+        return limite.subtract(calcularTotalDaFatura()).setScale(2, RoundingMode.CEILING);
+    }
+
+    public Set<Transacao> retornarAsUltimas10Transacoes() {
+        return transacoes.stream().limit(10).collect(Collectors.toSet());
+    }
 }

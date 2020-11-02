@@ -8,23 +8,25 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
-public class CartaoService {
+public class ProcessarCartao {
 
     private final EntityManager entityManager;
 
-    public CartaoService(EntityManager entityManager) {
+    public ProcessarCartao(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 
-    @Transactional
+    @Transactional                                  //1
     public Cartao verificarExistenciaDeCartao(CartaoResponseListener cartaoResponseListener){
         Assert.notNull(cartaoResponseListener, "Os dados do cartão não podem ser nulos");
+                //2
         List<Cartao> respostaCartao = entityManager.createNamedQuery("findCartaoByNumero", Cartao.class)
                 .setParameter("numeroDoCartao", cartaoResponseListener.getId())
                 .getResultList();
 
         Cartao cartao;
 
+        //3
         if(respostaCartao.isEmpty()){
             cartao = cartaoResponseListener.toCartao();
             entityManager.persist(cartao);

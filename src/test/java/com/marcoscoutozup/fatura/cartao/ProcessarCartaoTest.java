@@ -8,22 +8,22 @@ import org.mockito.Mock;
 
 import javax.persistence.EntityManager;
 
-public class CartaoServiceTest {
+public class ProcessarCartaoTest {
 
-    private CartaoService cartaoService;
+    private ProcessarCartao processarCartao;
 
     @Mock
     private EntityManager entityManager;
 
     @BeforeEach
     public void setup(){
-        cartaoService = new CartaoService(entityManager);
+        processarCartao = new ProcessarCartao(entityManager);
     }
 
     @Test
     @DisplayName("Deve lançar exceção se dados do cartão forem nulos")
     public void deveLancarExcecaoSeDadosDoCartaoForemNulos(){
-        Assertions.assertThrows(IllegalArgumentException.class, () -> cartaoService.verificarExistenciaDeCartao(null));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> processarCartao.verificarExistenciaDeCartao(null));
     }
 
 }

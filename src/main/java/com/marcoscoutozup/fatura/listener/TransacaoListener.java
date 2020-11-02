@@ -1,7 +1,7 @@
 package com.marcoscoutozup.fatura.listener;
 
 import com.marcoscoutozup.fatura.cartao.Cartao;
-import com.marcoscoutozup.fatura.cartao.CartaoService;
+import com.marcoscoutozup.fatura.cartao.ProcessarCartao;
 import com.marcoscoutozup.fatura.fatura.Fatura;
 import com.marcoscoutozup.fatura.fatura.FaturaService;
 import com.marcoscoutozup.fatura.transacao.Transacao;
@@ -17,12 +17,12 @@ import javax.transaction.Transactional;
 public class TransacaoListener {
 
     private final EntityManager entityManager;
-    private final CartaoService cartaoService; //1
+    private final ProcessarCartao processarCartao; //1
     private final FaturaService faturaService; //2
 
-    public TransacaoListener(EntityManager entityManager, CartaoService cartaoService, FaturaService faturaService) {
+    public TransacaoListener(EntityManager entityManager, ProcessarCartao processarCartao, FaturaService faturaService) {
         this.entityManager = entityManager;
-        this.cartaoService = cartaoService;
+        this.processarCartao = processarCartao;
         this.faturaService = faturaService;
     }
 
@@ -36,7 +36,7 @@ public class TransacaoListener {
         entityManager.persist(transacao);
 
         //4
-        Cartao cartao = cartaoService.verificarExistenciaDeCartao(transacaoResponse.getCartao());
+        Cartao cartao = processarCartao.verificarExistenciaDeCartao(transacaoResponse.getCartao());
 
         //5
         Fatura fatura = faturaService.verificarExistenciaDeFatura(cartao, transacao.retornarMesDaTransacao());

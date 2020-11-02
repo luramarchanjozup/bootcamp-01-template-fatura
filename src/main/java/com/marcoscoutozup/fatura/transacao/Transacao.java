@@ -11,7 +11,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -63,4 +62,6 @@ public class Transacao {
         Assert.notNull(transacoes, "Não é possível fazer a conversão de uma lista nula");
         return transacoes.stream().map(Transacao::toResponse).collect(Collectors.toSet());
     }
+
+
 }
