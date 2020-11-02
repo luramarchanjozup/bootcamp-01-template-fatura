@@ -1,6 +1,8 @@
 package com.marcoscoutozup.fatura.fatura;
 
 import com.marcoscoutozup.fatura.cartao.Cartao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -12,6 +14,8 @@ import java.util.List;
 public class FaturaService {
 
     private final EntityManager entityManager;
+
+    private final Logger log = LoggerFactory.getLogger(FaturaService.class);
 
     public FaturaService(EntityManager entityManager) {
         this.entityManager = entityManager;
@@ -31,6 +35,7 @@ public class FaturaService {
         if(respostaFatura.isEmpty()){
             fatura = new Fatura(mesDaTransacao, cartao);
             entityManager.persist(fatura);
+            log.info("Fatura não foi encontrada no sistema, salvando informações da fatura. Id: {}", fatura.getId());
             return fatura;
         }
 

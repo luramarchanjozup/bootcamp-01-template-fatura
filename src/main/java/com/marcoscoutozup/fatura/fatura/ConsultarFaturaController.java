@@ -2,6 +2,9 @@ package com.marcoscoutozup.fatura.fatura;
 
 import com.marcoscoutozup.fatura.cartao.Cartao;
 import com.marcoscoutozup.fatura.exceptions.StandardException;
+import com.marcoscoutozup.fatura.fatura.parcelarfatura.ParcelarFaturaController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,20 +23,22 @@ import java.util.UUID;
 public class ConsultarFaturaController {
 
     private final EntityManager entityManager;
+    private final Logger log = LoggerFactory.getLogger(ConsultarFaturaController.class);
 
     public ConsultarFaturaController(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity buscarDetalhesDaFatura(@PathVariable UUID id){
+    @GetMapping("/{numeroDoCartao}")
+    public ResponseEntity buscarDetalhesDaFatura(@PathVariable UUID numeroDoCartao){
                     //1
         final List<Cartao> cartao = entityManager.createNamedQuery("findCartaoByNumero", Cartao.class)
-                .setParameter("numeroDoCartao", id)
+                .setParameter("numeroDoCartao", numeroDoCartao)
                 .getResultList();
 
         //2
         if(cartao.isEmpty()){
+            log.warn("Cartão não foi encontrado. Número do cartão: {}", numeroDoCartao);
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                                 //3
                     .body(new StandardException(HttpStatus.NOT_FOUND.value(), Arrays.asList("O cartão não foi encontrado")));
@@ -41,12 +46,13 @@ public class ConsultarFaturaController {
 
                     //4
         final List<Fatura> fatura = entityManager.createNamedQuery("findFaturaByCartaoAndMesCorrente", Fatura.class)
-                .setParameter("numeroDoCartao", id)
+                .setParameter("numeroDoCartao", numeroDoCartao)
                 .setParameter("mesCorrespondente", LocalDate.now().getMonth().getValue())
                 .getResultList();
 
         //5
         if(fatura.isEmpty()) {
+            log.warn("Não foram encontradas transacões para a fatura do mês corrente. Número do cartão: {}", numeroDoCartao);
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new StandardException(HttpStatus.NOT_FOUND.value(), Arrays.asList("Não existem transações para a fatura do mês corrente")));
         }

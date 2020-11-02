@@ -65,4 +65,12 @@ public class Fatura {
     public Set<Transacao> retornarAsUltimas10Transacoes() {
         return transacoes.stream().limit(10).collect(Collectors.toSet());
     }
+
+    public boolean verificarSeCartaoPertenceAFatura(UUID numeroDoCartao){
+        return this.cartao.getNumeroDoCartao().equals(numeroDoCartao);
+    }
+
+    public UUID getId() {
+        return id;
+    }
 }

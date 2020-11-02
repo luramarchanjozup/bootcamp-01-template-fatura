@@ -1,5 +1,6 @@
 package com.marcoscoutozup.fatura.cartao;
 
+import com.marcoscoutozup.fatura.cartao.saldo.LimiteResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

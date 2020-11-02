@@ -1,5 +1,8 @@
 package com.marcoscoutozup.fatura.cartao;
 
+import com.marcoscoutozup.fatura.fatura.parcelarfatura.ParcelarFaturaController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -11,6 +14,8 @@ import java.util.List;
 public class ProcessarCartao {
 
     private final EntityManager entityManager;
+
+    private final Logger log = LoggerFactory.getLogger(ProcessarCartao.class);
 
     public ProcessarCartao(EntityManager entityManager) {
         this.entityManager = entityManager;
@@ -30,6 +35,7 @@ public class ProcessarCartao {
         if(respostaCartao.isEmpty()){
             cartao = cartaoResponseListener.toCartao();
             entityManager.persist(cartao);
+            log.info("Cartão não foi encontrado no sistema, salvando informações do cartão, Número do cartão: {}", cartao.getNumeroDoCartao());
             return cartao;
         }
 
