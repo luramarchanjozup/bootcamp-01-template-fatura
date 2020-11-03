@@ -1,4 +1,4 @@
-package com.marcoscoutozup.fatura.fatura.parcelarfatura;
+package com.marcoscoutozup.fatura.parcelarfatura;
 
 import com.marcoscoutozup.fatura.exceptions.StandardException;
 import com.marcoscoutozup.fatura.fatura.Fatura;
@@ -17,47 +17,54 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/cartoes/faturas/parcelar")
+@RequestMapping("/cartoes")
 public class ParcelarFaturaController {
 
     private final EntityManager entityManager;
+    private final ComunicarSistemaExternoDoParcelamento client; //1
     private final Logger log = LoggerFactory.getLogger(ParcelarFaturaController.class);
 
-    public ParcelarFaturaController(EntityManager entityManager) {
+    public ParcelarFaturaController(EntityManager entityManager, ComunicarSistemaExternoDoParcelamento client) {
         this.entityManager = entityManager;
+        this.client = client;
     }
 
-    @PostMapping("/{numeroDoCartao}/{idFatura}")
+    @PostMapping("/{numeroDoCartao}/faturas/{idFatura}/parcelar")
     @Transactional
     public ResponseEntity parcelarFatura(@PathVariable UUID numeroDoCartao,
                                          @PathVariable UUID idFatura,
-                                         @RequestBody @Valid ParcelamentoDeFaturaRequest parcelamento, //1
+                                                                //2
+                                         @RequestBody @Valid ParcelamentoDeFaturaRequest parcelamento,
                                          UriComponentsBuilder uri){
 
-                        //2
+                        //3
         final Optional<Fatura> faturaProcurada = Optional.ofNullable(entityManager.find(Fatura.class, idFatura));
 
-        //3
+        //4
         if(faturaProcurada.isEmpty()){
             log.warn("Fatura não encontrada, Id: {}", idFatura);
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                                //4
+                                //5
                     .body(new StandardException(HttpStatus.NOT_FOUND.value(), Arrays.asList("Fatura não encontrada")));
         }
 
-        //5
-        if(!faturaProcurada.get().verificarSeCartaoPertenceAFatura(numeroDoCartao)){
+        Fatura fatura = faturaProcurada.get();
+
+        //6
+        if(!fatura.verificarSeCartaoPertenceAFatura(numeroDoCartao)){
             log.warn("Fatura não pertence ao cartão, Número Do Cartão: {}", idFatura);
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
-                    //4
                     .body(new StandardException(HttpStatus.UNPROCESSABLE_ENTITY.value(), Arrays.asList("Fatura não pertence ao cartão")));
         }
 
-        //6
+        //7
         ParcelamentoDeFatura parcelamentoDeFatura = parcelamento.toParcelamentoDeFatura();
+        parcelamentoDeFatura.relacionarFaturaAoParcelamento(fatura);
         entityManager.persist(parcelamentoDeFatura);
 
-        return ResponseEntity.created(uri.path("/cartoes/parcelamentos/{id}")
+        client.comunicarSistemaExternoSobreParcelamentoDeFatura(numeroDoCartao, parcelamentoDeFatura);
+
+        return ResponseEntity.created(uri.path("/cartoes/{id}/parcelamentos")
                 .buildAndExpand(parcelamentoDeFatura.getId())
                 .toUri())
                 .build();

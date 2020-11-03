@@ -1,4 +1,4 @@
-package com.marcoscoutozup.fatura.cartao.saldo;
+package com.marcoscoutozup.fatura.saldocartao;
 
 import java.math.BigDecimal;
 

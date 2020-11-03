@@ -1,9 +1,8 @@
-package com.marcoscoutozup.fatura.cartao.saldo;
+package com.marcoscoutozup.fatura.saldocartao;
 
 
 import com.marcoscoutozup.fatura.cartao.CartaoClient;
 import com.marcoscoutozup.fatura.exceptions.StandardException;
-import com.marcoscoutozup.fatura.fatura.parcelarfatura.ParcelarFaturaController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -17,7 +16,7 @@ import java.util.Arrays;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/cartoes/saldos")
+@RequestMapping("/cartoes")
 public class ConsultarSaldoDoCartaoController {
 
                     //1
@@ -32,7 +31,7 @@ public class ConsultarSaldoDoCartaoController {
         this.verificarSaldo = verificarSaldo;
     }
 
-    @GetMapping("/{numeroDoCartao}")
+    @GetMapping("/{numeroDoCartao}/saldo")
     public ResponseEntity consultarSaldoDoCartao(@PathVariable UUID numeroDoCartao){
 
                         //3

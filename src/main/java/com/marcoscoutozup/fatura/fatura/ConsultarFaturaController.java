@@ -2,7 +2,6 @@ package com.marcoscoutozup.fatura.fatura;
 
 import com.marcoscoutozup.fatura.cartao.Cartao;
 import com.marcoscoutozup.fatura.exceptions.StandardException;
-import com.marcoscoutozup.fatura.fatura.parcelarfatura.ParcelarFaturaController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -19,7 +18,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/cartoes/faturas")
+@RequestMapping("/cartoes")
 public class ConsultarFaturaController {
 
     private final EntityManager entityManager;
@@ -29,7 +28,7 @@ public class ConsultarFaturaController {
         this.entityManager = entityManager;
     }
 
-    @GetMapping("/{numeroDoCartao}")
+    @GetMapping("/{numeroDoCartao}/faturas")
     public ResponseEntity buscarDetalhesDaFatura(@PathVariable UUID numeroDoCartao){
                     //1
         final List<Cartao> cartao = entityManager.createNamedQuery("findCartaoByNumero", Cartao.class)

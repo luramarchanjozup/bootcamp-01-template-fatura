@@ -1,9 +1,9 @@
 package com.marcoscoutozup.fatura.cartao;
 
-import com.marcoscoutozup.fatura.cartao.saldo.ConsultarSaldoDoCartaoController;
-import com.marcoscoutozup.fatura.cartao.saldo.LimiteResponse;
-import com.marcoscoutozup.fatura.cartao.saldo.SaldoResponse;
-import com.marcoscoutozup.fatura.cartao.saldo.VerificarSaldo;
+import com.marcoscoutozup.fatura.saldocartao.ConsultarSaldoDoCartaoController;
+import com.marcoscoutozup.fatura.saldocartao.LimiteResponse;
+import com.marcoscoutozup.fatura.saldocartao.SaldoResponse;
+import com.marcoscoutozup.fatura.saldocartao.VerificarSaldo;
 import com.marcoscoutozup.fatura.exceptions.StandardException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,4 +1,4 @@
-package com.marcoscoutozup.fatura.fatura.parcelarfatura;
+package com.marcoscoutozup.fatura.parcelarfatura;
 
 import com.marcoscoutozup.fatura.exceptions.StandardException;
 import com.marcoscoutozup.fatura.fatura.Fatura;
@@ -20,7 +20,7 @@ import java.util.UUID;
 
 import static org.mockito.Mockito.*;
 
-public class ParcelarFaturaTests {
+public class ParcelarFaturaControllerTests {
 
     @Mock
     private EntityManager entityManager;
@@ -37,12 +37,15 @@ public class ParcelarFaturaTests {
     @Mock
     private UriComponents components;
 
+    @Mock
+    private ComunicarSistemaExternoDoParcelamento client;
+
     private ParcelarFaturaController controller;
 
     @BeforeEach
     public void setup(){
         MockitoAnnotations.initMocks(this);
-        controller = new ParcelarFaturaController(entityManager);
+        controller = new ParcelarFaturaController(entityManager, client);
     }
 
 

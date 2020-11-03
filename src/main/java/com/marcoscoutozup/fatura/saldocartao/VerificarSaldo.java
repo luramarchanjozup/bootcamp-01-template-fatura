@@ -1,6 +1,5 @@
-package com.marcoscoutozup.fatura.cartao.saldo;
+package com.marcoscoutozup.fatura.saldocartao;
 
-import com.marcoscoutozup.fatura.cartao.saldo.SaldoResponse;
 import com.marcoscoutozup.fatura.fatura.Fatura;
 import com.marcoscoutozup.fatura.transacao.Transacao;
 import org.springframework.stereotype.Service;
