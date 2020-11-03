@@ -51,10 +51,10 @@ public class ParcelarFaturaController {
         Fatura fatura = faturaProcurada.get();
 
         //6
-        if(!fatura.verificarSeCartaoPertenceAFatura(numeroDoCartao)){
-            log.warn("Fatura não pertence ao cartão, Número Do Cartão: {}", idFatura);
+        if(!fatura.verificarSeCartaoPertenceAFatura(numeroDoCartao) || !fatura.verificarSeFaturaEDoMesCorrente()){
+            log.warn("Fatura não é válida para parcelamento, Fatura: {}", idFatura);
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
-                    .body(new StandardException(HttpStatus.UNPROCESSABLE_ENTITY.value(), Arrays.asList("Fatura não pertence ao cartão")));
+                    .body(new StandardException(HttpStatus.UNPROCESSABLE_ENTITY.value(), Arrays.asList("Fatura não é válida para parcelamento")));
         }
 
         //7

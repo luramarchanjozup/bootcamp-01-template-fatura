@@ -46,7 +46,7 @@ public class ConsultarFaturaController {
                     //4
         final List<Fatura> fatura = entityManager.createNamedQuery("findFaturaByCartaoAndMesCorrente", Fatura.class)
                 .setParameter("numeroDoCartao", numeroDoCartao)
-                .setParameter("mesCorrespondente", LocalDate.now().getMonth().getValue())
+                .setParameter("mesCorrespondente", LocalDate.now().getMonthValue())
                 .getResultList();
 
         //5

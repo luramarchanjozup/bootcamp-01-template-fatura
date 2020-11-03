@@ -27,13 +27,14 @@ public class ComunicarSistemaExternoDoParcelamento {
         Assert.notNull(parcelamentoDeFatura, "Não é possível fazer a comunicação de parcelamento com parcelamento nulo");
 
         //3
-        ParcelamentoDaFaturaRequestClient requestClient =
+        final ParcelamentoDaFaturaRequestClient requestClient =
                 new ParcelamentoDaFaturaRequestClient(parcelamentoDeFatura);
 
         //4
-        ParcelamentoDaFaturaResponseClient responseClient = parcelamentoClient.comunicarParcelamentoDeFatura(numeroDoCartao, requestClient);
-        parcelamentoDeFatura.mudarStatusDoParcelamento(responseClient.getResultado());
+        final ParcelamentoDaFaturaResponseClient responseClient =
+                parcelamentoClient.comunicarParcelamentoDeFatura(numeroDoCartao, requestClient);
 
+        parcelamentoDeFatura.mudarStatusDoParcelamento(responseClient.getResultado());
         entityManager.merge(parcelamentoDeFatura);
 
     }

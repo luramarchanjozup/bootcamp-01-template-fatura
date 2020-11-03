@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -68,6 +69,10 @@ public class Fatura {
 
     public boolean verificarSeCartaoPertenceAFatura(UUID numeroDoCartao){
         return this.cartao.getNumeroDoCartao().equals(numeroDoCartao);
+    }
+
+    public boolean verificarSeFaturaEDoMesCorrente(){
+        return this.mesCorrespondente.equals(LocalDate.now().getMonthValue());
     }
 
     public UUID getId() {

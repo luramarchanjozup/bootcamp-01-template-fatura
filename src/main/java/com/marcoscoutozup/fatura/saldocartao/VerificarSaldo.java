@@ -28,7 +28,7 @@ public class VerificarSaldo {
                     //1
         final List<Fatura> faturas = entityManager.createNamedQuery("findFaturaByCartaoAndMesCorrente", Fatura.class)
                 .setParameter("numeroDoCartao", numeroDoCartao)
-                .setParameter("mesCorrespondente", LocalDate.now().getMonth().getValue())
+                .setParameter("mesCorrespondente", LocalDate.now().getMonthValue())
                 .getResultList();
 
         //2
