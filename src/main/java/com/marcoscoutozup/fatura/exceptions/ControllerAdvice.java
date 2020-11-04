@@ -34,7 +34,7 @@ public class ControllerAdvice {
                 .map(error -> messageSource.getMessage(error, Locale.getDefault()))
                 .collect(Collectors.toList());
 
-        log.warn("Tratamento do erro MethodArgumentNotValidException: {}", errors);
+        log.warn("[TRATAMENTO DE ERRO] MethodArgumentNotValidException: {}", errors);
 
         return new StandardException(HttpStatus.BAD_REQUEST.value(), errors);
     }

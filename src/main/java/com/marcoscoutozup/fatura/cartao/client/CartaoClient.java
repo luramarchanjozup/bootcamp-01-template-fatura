@@ -1,4 +1,4 @@
-package com.marcoscoutozup.fatura.cartao;
+package com.marcoscoutozup.fatura.cartao.client;
 
 import com.marcoscoutozup.fatura.saldocartao.LimiteResponse;
 import org.springframework.cloud.openfeign.FeignClient;

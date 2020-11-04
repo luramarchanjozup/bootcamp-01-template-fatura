@@ -37,12 +37,14 @@ public class RenegociarFaturaController {
                                            @RequestBody @Valid RenegociacaoDeFaturaRequest renegociacao,
                                            UriComponentsBuilder uri){
 
+        log.info("[RENEGOCIAÇÃO DE FATURA] Processando pedido de renegociação de fatura");
+
                         //3
         final Optional<Fatura> faturaProcurada = Optional.ofNullable(entityManager.find(Fatura.class, idFatura));
 
         //4
         if(faturaProcurada.isEmpty()){
-            log.warn("Fatura não encontrada, Id: {}", idFatura);
+            log.warn("[RENEGOCIAÇÃO DE FATURA] Fatura não encontrada, Id: {}", idFatura);
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                                 //5
                     .body(new StandardException(HttpStatus.NOT_FOUND.value(), Arrays.asList("Fatura não encontrada")));
@@ -52,7 +54,7 @@ public class RenegociarFaturaController {
 
         //6
         if(!fatura.verificarSeCartaoPertenceAFatura(numeroDoCartao)){
-            log.warn("Fatura não pertence ao cartão, Número Do Cartão: {}", idFatura);
+            log.warn("[RENEGOCIAÇÃO DE FATURA] Fatura não pertence ao cartão, cartão: {}", idFatura);
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
                     .body(new StandardException(HttpStatus.UNPROCESSABLE_ENTITY.value(), Arrays.asList("Fatura não pertence ao cartão")));
         }

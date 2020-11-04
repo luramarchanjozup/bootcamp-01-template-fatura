@@ -1,7 +1,7 @@
 package com.marcoscoutozup.fatura.saldocartao;
 
 
-import com.marcoscoutozup.fatura.cartao.CartaoClient;
+import com.marcoscoutozup.fatura.cartao.client.CartaoClient;
 import com.marcoscoutozup.fatura.exceptions.StandardException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,13 +34,15 @@ public class ConsultarSaldoDoCartaoController {
     @GetMapping("/{numeroDoCartao}/saldo")
     public ResponseEntity consultarSaldoDoCartao(@PathVariable UUID numeroDoCartao){
 
+        log.info("[CONSULTA DE SALDO DO CARTÃO] Processando pedido de consulta de saldo do cartão");
+
                         //3
         final ResponseEntity<LimiteResponse> response =
                 cartaoClient.consultarlimiteDoCartao(numeroDoCartao);
 
         //4
         if(response.getStatusCode() == HttpStatus.NOT_FOUND){
-            log.warn("O cartão não foi encontrado no sistema externo, Número do cartão: {}", numeroDoCartao);
+            log.warn("[CONSULTA DE SALDO DO CARTÃO] O cartão não foi encontrado no sistema externo, cartão: {}", numeroDoCartao);
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                                 //5
                     .body(new StandardException(HttpStatus.NOT_FOUND.value(), Arrays.asList("O cartão não foi encontrado")));

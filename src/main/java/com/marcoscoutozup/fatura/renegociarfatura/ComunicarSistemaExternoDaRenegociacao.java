@@ -3,6 +3,8 @@ package com.marcoscoutozup.fatura.renegociarfatura;
 import com.marcoscoutozup.fatura.renegociarfatura.client.RenegociacaoDeFaturaClient;
 import com.marcoscoutozup.fatura.renegociarfatura.client.RenegociacaoDeFaturaRequestClient;
 import com.marcoscoutozup.fatura.renegociarfatura.client.RenegociacaoDeFaturaResponseClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -14,6 +16,8 @@ public class ComunicarSistemaExternoDaRenegociacao {
 
     private final RenegociacaoDeFaturaClient renegociacaoDeFaturaClient; //1
     private final EntityManager entityManager;
+    private final Logger log = LoggerFactory.getLogger(ComunicarSistemaExternoDaRenegociacao.class);
+
 
     public ComunicarSistemaExternoDaRenegociacao(RenegociacaoDeFaturaClient renegociacaoDeFaturaClient, EntityManager entityManager) {
         this.renegociacaoDeFaturaClient = renegociacaoDeFaturaClient;
@@ -22,6 +26,7 @@ public class ComunicarSistemaExternoDaRenegociacao {
 
                                                                                             //2
     public void comunicarSistemaExternoSobreParcelamentoDeFatura(UUID numeroDoCartao, RenegociacaoDeFatura renegociacaoDeFatura){
+        log.error("[RENEGOCIAÇÃO DE FATURA] Comunicando sistema externo sobre renegociação de fatura {}", renegociacaoDeFatura.getId());
         Assert.notNull(renegociacaoDeFatura, "Não é possível fazer a comunicação de parcelamento com parcelamento nulo");
 
         //3

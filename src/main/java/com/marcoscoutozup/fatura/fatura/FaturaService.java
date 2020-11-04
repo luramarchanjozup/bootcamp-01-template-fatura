@@ -23,6 +23,7 @@ public class FaturaService {
 
     @Transactional
     public Fatura verificarExistenciaDeFatura(Cartao cartao, Integer mesDaTransacao){
+        log.info("[PROCESSAMENTO DE FATURA] Processando fatura do mês {} para o cartão {}", mesDaTransacao, cartao.getNumeroDoCartao());
         Assert.notNull(cartao, "O cartão não pode ser nulo");
         Assert.notNull(mesDaTransacao, "O mês de transação não pode ser nulo");
         List<Fatura> respostaFatura = entityManager.createNamedQuery("findFaturaByCartaoAndMesCorrente", Fatura.class)
@@ -35,7 +36,7 @@ public class FaturaService {
         if(respostaFatura.isEmpty()){
             fatura = new Fatura(mesDaTransacao, cartao);
             entityManager.persist(fatura);
-            log.info("Fatura não foi encontrada no sistema, salvando informações da fatura. Id: {}", fatura.getId());
+            log.info("[PROCESSAMENTO DE FATURA] Fatura não foi encontrada no sistema, salvando informações da fatura. Id: {}", fatura.getId());
             return fatura;
         }
 

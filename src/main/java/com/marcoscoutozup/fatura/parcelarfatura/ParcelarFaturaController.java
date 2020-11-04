@@ -37,12 +37,13 @@ public class ParcelarFaturaController {
                                          @RequestBody @Valid ParcelamentoDeFaturaRequest parcelamento,
                                          UriComponentsBuilder uri){
 
+        log.info("[PARCELAMENTO DE FATURA] Processando pedido de parcelamento de fatura");
                         //3
         final Optional<Fatura> faturaProcurada = Optional.ofNullable(entityManager.find(Fatura.class, idFatura));
 
         //4
         if(faturaProcurada.isEmpty()){
-            log.warn("Fatura não encontrada, Id: {}", idFatura);
+            log.warn("[PARCELAMENTO DE FATURA] Fatura não encontrada, Id: {}", idFatura);
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                                 //5
                     .body(new StandardException(HttpStatus.NOT_FOUND.value(), Arrays.asList("Fatura não encontrada")));
@@ -52,7 +53,7 @@ public class ParcelarFaturaController {
 
         //6
         if(!fatura.verificarSeCartaoPertenceAFatura(numeroDoCartao) || !fatura.verificarSeFaturaEDoMesCorrente()){
-            log.warn("Fatura não é válida para parcelamento, Fatura: {}", idFatura);
+            log.warn("[PARCELAMENTO DE FATURA] Fatura não é válida para parcelamento, Fatura: {}", idFatura);
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
                     .body(new StandardException(HttpStatus.UNPROCESSABLE_ENTITY.value(), Arrays.asList("Fatura não é válida para parcelamento")));
         }

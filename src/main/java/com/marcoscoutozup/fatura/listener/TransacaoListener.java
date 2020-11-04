@@ -6,6 +6,8 @@ import com.marcoscoutozup.fatura.fatura.Fatura;
 import com.marcoscoutozup.fatura.fatura.FaturaService;
 import com.marcoscoutozup.fatura.transacao.Transacao;
 import com.marcoscoutozup.fatura.transacao.TransacaoResponseListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -19,6 +21,7 @@ public class TransacaoListener {
     private final EntityManager entityManager;
     private final ProcessarCartao processarCartao; //1
     private final FaturaService faturaService; //2
+    private final Logger log = LoggerFactory.getLogger(TransacaoListener.class);
 
     public TransacaoListener(EntityManager entityManager, ProcessarCartao processarCartao, FaturaService faturaService) {
         this.entityManager = entityManager;
@@ -29,6 +32,7 @@ public class TransacaoListener {
     @Transactional
     @KafkaListener(topics = "${spring.kafka.topic.transactions}")
     public void ouvirTransacoesDaMensageria(TransacaoResponseListener transacaoResponse) {
+        log.info("[LISTENER] Ouvindo tópicos de transacão e processando resposta");
         Assert.notNull(transacaoResponse, "A resposta de transação não pode ser nula");
 
         //3

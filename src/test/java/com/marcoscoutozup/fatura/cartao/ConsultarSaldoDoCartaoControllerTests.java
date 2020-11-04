@@ -1,5 +1,6 @@
 package com.marcoscoutozup.fatura.cartao;
 
+import com.marcoscoutozup.fatura.cartao.client.CartaoClient;
 import com.marcoscoutozup.fatura.saldocartao.ConsultarSaldoDoCartaoController;
 import com.marcoscoutozup.fatura.saldocartao.LimiteResponse;
 import com.marcoscoutozup.fatura.saldocartao.SaldoResponse;
