@@ -9,13 +9,13 @@ public class VencimentoDaFaturaRequest {
     @NotNull
     @Min(1)
     @Max(31)
-    private Integer diaDeVencimento;
+    private Integer dia;
 
-    public Integer getDiaDeVencimento() {
-        return diaDeVencimento;
+    public Integer getDia() {
+        return dia;
     }
 
-    public void setDiaDeVencimento(Integer diaDeVencimento) {
-        this.diaDeVencimento = diaDeVencimento;
+    public void setDia(Integer dia) {
+        this.dia = dia;
     }
 }

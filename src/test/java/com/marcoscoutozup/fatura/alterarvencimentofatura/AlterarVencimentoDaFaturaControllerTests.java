@@ -1,5 +1,6 @@
 package com.marcoscoutozup.fatura.alterarvencimentofatura;
 
+import com.marcoscoutozup.fatura.alterarvencimentofatura.client.AlteracaoDeDataDeVencimentoClient;
 import com.marcoscoutozup.fatura.cartao.Cartao;
 import com.marcoscoutozup.fatura.exceptions.StandardException;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,12 +32,15 @@ public class AlterarVencimentoDaFaturaControllerTests {
     @Mock
     private TypedQuery query;
 
+    @Mock
+    private AlteracaoDeDataDeVencimentoClient client;
+
     private AlterarVencimentoDaFaturaController controller;
 
     @BeforeEach
     public void setup(){
         initMocks(this);
-        controller =  new AlterarVencimentoDaFaturaController(entityManager);
+        controller =  new AlterarVencimentoDaFaturaController(entityManager, client);
     }
 
     @Test
@@ -51,18 +55,31 @@ public class AlterarVencimentoDaFaturaControllerTests {
     }
 
     @Test
+    @DisplayName("Não deve alterar data de vencimento de faturas do cartão se sistema de cartões retornar erro")
+    public void naoDeveAlterarDataDeVencimentoDeFaturasDoCartaoSeSistemaDeCartoesRetornarErro(){
+        when(entityManager.createNamedQuery(anyString(), any())).thenReturn(query);
+        when(query.setParameter(anyString(), any())).thenReturn(query);
+        when(query.getResultList()).thenReturn(Arrays.asList(new Cartao()));
+        when(client.comunicarAlteracaoDeVencimentoDeFaturas(any(), any())).thenReturn(ResponseEntity.badRequest().build());
+        ResponseEntity responseEntity = controller.alterarDataDeVencimentoDaFatura(UUID.randomUUID(), retornaVencimentoDaFaturaRequest());
+        assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, responseEntity.getStatusCode());
+        assertTrue(responseEntity.getBody() instanceof StandardException);
+    }
+
+    @Test
     @DisplayName("Deve modificar data de vencimento de faturas do cartão")
     public void deveModificarDataDeVencimentoDasFaturasDoCartao(){
         when(entityManager.createNamedQuery(anyString(), any())).thenReturn(query);
         when(query.setParameter(anyString(), any())).thenReturn(query);
         when(query.getResultList()).thenReturn(Arrays.asList(new Cartao()));
+        when(client.comunicarAlteracaoDeVencimentoDeFaturas(any(), any())).thenReturn(ResponseEntity.ok().build());
         ResponseEntity responseEntity = controller.alterarDataDeVencimentoDaFatura(UUID.randomUUID(), retornaVencimentoDaFaturaRequest());
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     }
 
     private VencimentoDaFaturaRequest retornaVencimentoDaFaturaRequest(){
         VencimentoDaFaturaRequest vencimentoDaFaturaRequest = new VencimentoDaFaturaRequest();
-        vencimentoDaFaturaRequest.setDiaDeVencimento(new Random().nextInt(30)+1);
+        vencimentoDaFaturaRequest.setDia(new Random().nextInt(30)+1);
         return vencimentoDaFaturaRequest;
     }
 }
