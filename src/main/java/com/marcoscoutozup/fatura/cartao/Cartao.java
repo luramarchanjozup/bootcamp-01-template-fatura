@@ -1,12 +1,11 @@
 package com.marcoscoutozup.fatura.cartao;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.NamedQuery;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.bind.DefaultValue;
+import org.springframework.util.Assert;
+
+import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.util.UUID;
 
 @Entity
@@ -24,6 +23,11 @@ public class Cartao {
     @Email
     private String email;
 
+    @NotNull
+    @Min(1)
+    @Max(31)
+    private Integer diaDeVencimentoDasFaturas;
+
     @Deprecated
     public Cartao() {
     }
@@ -31,6 +35,12 @@ public class Cartao {
     public Cartao(@NotNull UUID numeroDoCartao, @NotBlank @Email String email) {
         this.numeroDoCartao = numeroDoCartao;
         this.email = email;
+        this.diaDeVencimentoDasFaturas = 10;
+    }
+
+    public void alterarDiaDeVencimentoDaFatura(Integer diaDeVencimentoDasFaturas) {
+        Assert.notNull(diaDeVencimentoDasFaturas, "Dia de vencimento da fatura não pode ser nulo");
+        this.diaDeVencimentoDasFaturas = diaDeVencimentoDasFaturas;
     }
 
     public UUID getNumeroDoCartao() {
