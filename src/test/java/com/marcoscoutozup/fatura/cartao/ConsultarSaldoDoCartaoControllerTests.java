@@ -55,7 +55,7 @@ public class ConsultarSaldoDoCartaoControllerTests {
     public void deveRetornarSaldoCalculado(){
         when(cartaoClient.consultarlimiteDoCartao(any())).thenReturn(responseEntity);
         when(responseEntity.getBody()).thenReturn(new LimiteResponse());
-        when(verificarSaldo.verificarSaldoDisponivelNoCartao(any(), any())).thenReturn(new SaldoResponse(new BigDecimal(0), new HashSet<>()));
+        when(verificarSaldo.calcularSaldoDisponivel(any(), any())).thenReturn(new SaldoResponse(new BigDecimal(0), new HashSet<>()));
         ResponseEntity responseEntity = controller.consultarSaldoDoCartao(UUID.randomUUID());
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         Assertions.assertTrue(responseEntity.getBody() instanceof SaldoResponse);

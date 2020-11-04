@@ -43,7 +43,7 @@ public class TransacaoListener {
         Cartao cartao = processarCartao.verificarExistenciaDeCartao(transacaoResponse.getCartao());
 
         //5
-        Fatura fatura = faturaService.verificarExistenciaDeFatura(cartao, transacao.retornarMesDaTransacao());
+        Fatura fatura = faturaService.verificarExistenciaDeFatura(cartao, transacao.retornarMesDaTransacao(), transacao.retornarAnoDaTransacao());
         fatura.adicionarTransacaoNaFatura(transacao);
         entityManager.merge(fatura);
     }

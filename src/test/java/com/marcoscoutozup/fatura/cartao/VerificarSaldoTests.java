@@ -28,13 +28,13 @@ public class VerificarSaldoTests {
     @Test
     @DisplayName("Deve lançar exceção se número do cartão for nulo")
     public void deveLancarExcecaoSeNumeroDoCartaoForNulo(){
-        Assertions.assertThrows(IllegalArgumentException.class, () -> verificarSaldo.verificarSaldoDisponivelNoCartao(null, new BigDecimal(0)));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> verificarSaldo.calcularSaldoDisponivel(null, new BigDecimal(0)));
     }
 
     @Test
     @DisplayName("Deve lançar exceção se limite for nulo")
     public void deveLancarExcecaoSeLimiteForNulo(){
-        Assertions.assertThrows(IllegalArgumentException.class, () -> verificarSaldo.verificarSaldoDisponivelNoCartao(UUID.randomUUID(), null));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> verificarSaldo.calcularSaldoDisponivel(UUID.randomUUID(), null));
     }
 
 }

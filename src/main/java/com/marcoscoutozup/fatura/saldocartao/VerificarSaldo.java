@@ -21,14 +21,15 @@ public class VerificarSaldo {
         this.entityManager = entityManager;
     }
 
-    public SaldoResponse verificarSaldoDisponivelNoCartao(UUID numeroDoCartao, BigDecimal limite){
+    public SaldoResponse calcularSaldoDisponivel(UUID numeroDoCartao, BigDecimal limite){
         Assert.notNull(numeroDoCartao, "O numero do cartão não pode ser nulo para calculo de saldo");
         Assert.notNull(limite, "O limite do cartão não pode ser nulo para calculo de saldo");
 
                     //1
-        final List<Fatura> faturas = entityManager.createNamedQuery("findFaturaByCartaoAndMesCorrente", Fatura.class)
+        final List<Fatura> faturas = entityManager.createNamedQuery("findFaturaByCartaoAndData", Fatura.class)
                 .setParameter("numeroDoCartao", numeroDoCartao)
-                .setParameter("mesCorrespondente", LocalDate.now().getMonthValue())
+                .setParameter("mes", LocalDate.now().getMonthValue())
+                .setParameter("ano", LocalDate.now().getYear())
                 .getResultList();
 
         //2

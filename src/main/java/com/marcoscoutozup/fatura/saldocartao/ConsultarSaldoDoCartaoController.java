@@ -50,7 +50,7 @@ public class ConsultarSaldoDoCartaoController {
 
         //6
         final SaldoResponse saldo =
-                verificarSaldo.verificarSaldoDisponivelNoCartao(numeroDoCartao, response.getBody().getLimite());
+                verificarSaldo.calcularSaldoDisponivel(numeroDoCartao, response.getBody().getLimite());
 
         return ResponseEntity.ok(saldo);
     }

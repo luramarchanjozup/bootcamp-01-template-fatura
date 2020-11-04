@@ -9,7 +9,7 @@ import org.mockito.Mock;
 
 import javax.persistence.EntityManager;
 
-public class FaturaTestsServiceTests {
+public class FaturaServiceTests {
 
     private FaturaService faturaService;
 
@@ -24,12 +24,18 @@ public class FaturaTestsServiceTests {
     @Test
     @DisplayName("Deve lançar exceção se cartão for nulo")
     public void deveLancarExcecaoSeCartaoForNulo(){
-        Assertions.assertThrows(IllegalArgumentException.class, () -> faturaService.verificarExistenciaDeFatura(null, 0));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> faturaService.verificarExistenciaDeFatura(null, 1, 1));
     }
 
     @Test
     @DisplayName("Deve lançar exceção se mês da transação for nulo")
     public void deveLancarExcecaoSeMesDaTransacaoForNulo(){
-        Assertions.assertThrows(IllegalArgumentException.class, () -> faturaService.verificarExistenciaDeFatura(new Cartao(), null));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> faturaService.verificarExistenciaDeFatura(new Cartao(), null, 1));
+    }
+
+    @Test
+    @DisplayName("Deve lançar exceção se ano da transação for nulo")
+    public void deveLancarExcecaoSeAnoDaTransacaoForNulo(){
+        Assertions.assertThrows(IllegalArgumentException.class, () -> faturaService.verificarExistenciaDeFatura(new Cartao(), 1, null));
     }
 }

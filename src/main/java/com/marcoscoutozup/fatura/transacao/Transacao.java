@@ -47,7 +47,11 @@ public class Transacao {
     }
 
     public Integer retornarMesDaTransacao() {
-        return efetivadaEm.getMonth().getValue();
+        return efetivadaEm.getMonthValue();
+    }
+    
+    public Integer retornarAnoDaTransacao() {
+        return efetivadaEm.getYear();
     }
 
     public BigDecimal retornarValorDaTransacao() {

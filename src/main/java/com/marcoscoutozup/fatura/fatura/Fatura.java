@@ -6,6 +6,7 @@ import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
@@ -15,8 +16,8 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Entity
-@NamedQuery(name = "findFaturaByCartaoAndMesCorrente",
-        query = "select f from Fatura f where f.cartao.numeroDoCartao = :numeroDoCartao and mesCorrespondente = :mesCorrespondente")
+@NamedQuery(name = "findFaturaByCartaoAndData",
+        query = "select f from Fatura f where f.cartao.numeroDoCartao = :numeroDoCartao and mes = :mes and ano = :ano")
 public class Fatura {
 
     @Id
@@ -24,7 +25,12 @@ public class Fatura {
     private UUID id;
 
     @NotNull
-    private Integer mesCorrespondente;
+    @Positive
+    private Integer mes;
+
+    @NotNull
+    @Positive
+    private Integer ano;
 
     @OneToMany
     private Set<Transacao> transacoes;
@@ -37,10 +43,17 @@ public class Fatura {
     public Fatura() {
     }
 
-    public Fatura(@NotNull Integer mesCorrespondente, @NotNull Cartao cartao) {
-        this.mesCorrespondente = mesCorrespondente;
-        this.cartao = cartao;
+    public Fatura(@NotNull @Positive Integer mes, @NotNull @Positive Integer ano, @NotNull Cartao cartao) {
+        this.mes = mes;
+        this.ano = ano;
         this.transacoes = new HashSet<>();
+        this.cartao = cartao;
+    }
+
+    public Fatura(@NotNull @Positive Integer mes, @NotNull @Positive Integer ano, Set<Transacao> transacoes) {
+        this.mes = mes;
+        this.ano = ano;
+        this.transacoes = transacoes;
     }
 
     public void adicionarTransacaoNaFatura(Transacao transacao){
@@ -56,7 +69,7 @@ public class Fatura {
     }
 
     public FaturaResponse toResponse(){
-        return new FaturaResponse(this.mesCorrespondente, Transacao.toResponseSet(transacoes), calcularTotalDaFatura());
+        return new FaturaResponse(this.mes, this.ano, Transacao.toResponseSet(transacoes), calcularTotalDaFatura());
     }
 
     public BigDecimal calcularSaldoDoCartao(BigDecimal limite){
@@ -72,7 +85,7 @@ public class Fatura {
     }
 
     public boolean verificarSeFaturaEDoMesCorrente(){
-        return this.mesCorrespondente.equals(LocalDate.now().getMonthValue());
+        return this.mes.equals(LocalDate.now().getMonthValue());
     }
 
     public UUID getId() {
