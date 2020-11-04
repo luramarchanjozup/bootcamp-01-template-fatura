@@ -1,10 +1,11 @@
 package com.marcoscoutozup.fatura.cartao;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.util.Assert;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 import javax.validation.constraints.*;
 import java.util.UUID;
 
@@ -47,4 +48,7 @@ public class Cartao {
         return numeroDoCartao;
     }
 
+    public UUID getId() {
+        return id;
+    }
 }

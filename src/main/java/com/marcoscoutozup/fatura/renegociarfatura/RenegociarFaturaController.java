@@ -29,9 +29,9 @@ public class RenegociarFaturaController {
         this.comunicarSistemaExternoDaRenegociacao = comunicarSistemaExternoDaRenegociacao;
     }
 
-    @PostMapping("/{numeroDoCartao}/faturas/{idFatura}/renegociar")
+    @PostMapping("/{idCartao}/faturas/{idFatura}/renegociar")
     @Transactional
-    public ResponseEntity renegociarFatura(@PathVariable UUID numeroDoCartao,
+    public ResponseEntity renegociarFatura(@PathVariable UUID idCartao,
                                            @PathVariable UUID idFatura,
                                                                 //2
                                            @RequestBody @Valid RenegociacaoDeFaturaRequest renegociacao,
@@ -53,7 +53,7 @@ public class RenegociarFaturaController {
         Fatura fatura = faturaProcurada.get();
 
         //6
-        if(!fatura.verificarSeCartaoPertenceAFatura(numeroDoCartao)){
+        if(!fatura.verificarSeCartaoPertenceAFatura(idCartao)){
             log.warn("[RENEGOCIAÇÃO DE FATURA] Fatura não pertence ao cartão, cartão: {}", idFatura);
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
                     .body(new StandardException(HttpStatus.UNPROCESSABLE_ENTITY.value(), Arrays.asList("Fatura não pertence ao cartão")));
@@ -64,7 +64,7 @@ public class RenegociarFaturaController {
         renegociacaoDeFatura.associarFaturaComRenegociacao(fatura);
         entityManager.persist(renegociacaoDeFatura);
 
-        comunicarSistemaExternoDaRenegociacao.comunicarSistemaExternoSobreParcelamentoDeFatura(numeroDoCartao, renegociacaoDeFatura);
+        comunicarSistemaExternoDaRenegociacao.comunicarSistemaExternoSobreParcelamentoDeFatura(fatura.retornarNumeroDoCartao(), renegociacaoDeFatura);
 
         return ResponseEntity.created(uri.path("/cartoes/{id}/renegociacoes")
                 .buildAndExpand(renegociacaoDeFatura.getId())

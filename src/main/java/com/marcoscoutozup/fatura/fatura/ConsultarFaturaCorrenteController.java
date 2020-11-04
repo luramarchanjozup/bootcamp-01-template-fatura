@@ -17,6 +17,7 @@ import javax.validation.constraints.Positive;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -31,31 +32,29 @@ public class ConsultarFaturaCorrenteController {
         this.entityManager = entityManager;
     }
 
-    @GetMapping("/{numeroDoCartao}/faturas")
-    public ResponseEntity buscarDetalhesDaFaturaCorrente(@PathVariable UUID numeroDoCartao){
+    @GetMapping("/{idCartao}/faturas")
+    public ResponseEntity buscarDetalhesDaFaturaCorrente(@PathVariable UUID idCartao){
         Integer mes = LocalDate.now().getMonthValue();
         Integer ano = LocalDate.now().getYear();
-        return processarConsultarDeFatura(numeroDoCartao, mes, ano);
+        return processarConsultarDeFatura(idCartao, mes, ano);
     }
 
-    @GetMapping("/{numeroDoCartao}/faturas/{mes}/{ano}")
-    public ResponseEntity buscarDetalhesDaFatura(@PathVariable UUID numeroDoCartao,
+    @GetMapping("/{idCartao}/faturas/{mes}/{ano}")
+    public ResponseEntity buscarDetalhesDaFatura(@PathVariable UUID idCartao,
                                                  @PathVariable @Positive Integer mes,
                                                  @PathVariable @Positive Integer ano){
-        return processarConsultarDeFatura(numeroDoCartao, mes, ano);
+        return processarConsultarDeFatura(idCartao, mes, ano);
     }
 
-    protected ResponseEntity processarConsultarDeFatura(UUID numeroDoCartao, Integer mes, Integer ano){
-        log.info("[BUSCA DE DETALHES DA FATURA] Solicitação de detalhes da fatura do cartão: {}", numeroDoCartao);
+    protected ResponseEntity processarConsultarDeFatura(UUID idCartao, Integer mes, Integer ano){
+        log.info("[BUSCA DE DETALHES DA FATURA] Solicitação de detalhes da fatura do cartão: {}", idCartao);
 
-                    //1
-        final List<Cartao> cartao = entityManager.createNamedQuery("findCartaoByNumero", Cartao.class)
-                .setParameter("numeroDoCartao", numeroDoCartao)
-                .getResultList();
+                        //1
+        final Optional<Cartao> cartaoProcurado = Optional.ofNullable(entityManager.find(Cartao.class, idCartao));
 
         //2
-        if(cartao.isEmpty()){
-            log.warn("[BUSCA DE DETALHES DA FATURA] Cartão não foi encontrado. Número do cartão: {}", numeroDoCartao);
+        if(cartaoProcurado.isEmpty()){
+            log.warn("[BUSCA DE DETALHES DA FATURA] Cartão não foi encontrado. Número do cartão: {}", idCartao);
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                                 //3
                     .body(new StandardException(HttpStatus.NOT_FOUND.value(), Arrays.asList("O cartão não foi encontrado")));
@@ -63,14 +62,14 @@ public class ConsultarFaturaCorrenteController {
 
                     //4
         final List<Fatura> fatura = entityManager.createNamedQuery("findFaturaByCartaoAndData", Fatura.class)
-                .setParameter("numeroDoCartao", numeroDoCartao)
+                .setParameter("idCartao", idCartao)
                 .setParameter("mes", mes)
                 .setParameter("ano", ano)
                 .getResultList();
 
         //5
         if(fatura.isEmpty()) {
-            log.warn("[BUSCA DE DETALHES DA FATURA] Não foram encontradas transacões para a fatura. Número do cartão: {}, Fatura: {}/{}", numeroDoCartao, mes, ano);
+            log.warn("[BUSCA DE DETALHES DA FATURA] Não foram encontradas transacões para a fatura. Número do cartão: {}, Fatura: {}/{}", idCartao, mes, ano);
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new StandardException(HttpStatus.NOT_FOUND.value(), Arrays.asList("Não existem transações para a fatura do mês corrente")));
         }

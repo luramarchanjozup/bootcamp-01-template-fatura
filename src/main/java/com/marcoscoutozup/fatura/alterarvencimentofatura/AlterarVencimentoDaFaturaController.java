@@ -13,7 +13,7 @@ import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -29,40 +29,39 @@ public class AlterarVencimentoDaFaturaController {
         this.client = client;
     }
 
-    @PostMapping("/{numeroDoCartao}/vencimentodafatura")
+    @PostMapping("/{idCartao}/vencimentodafatura")
     @Transactional
-    public ResponseEntity alterarDataDeVencimentoDaFatura(@PathVariable UUID numeroDoCartao,
+    public ResponseEntity alterarDataDeVencimentoDaFatura(@PathVariable UUID idCartao,
                                                                                 //1
                                                           @RequestBody @Valid VencimentoDaFaturaRequest vencimentoDaFaturaRequest){
 
         log.warn("[ALTERAÇÃO DE DATA DE VENCIMENTO DA FATURA] Processando alteração de data de vencimento da fatura");
 
-                    //2
-        final List<Cartao> cartaoProcurado = entityManager.createNamedQuery("findCartaoByNumero", Cartao.class)
-                .setParameter("numeroDoCartao", numeroDoCartao)
-                .getResultList();
+                        //2
+        final Optional<Cartao> cartaoProcurado = Optional.ofNullable(entityManager.find(Cartao.class, idCartao));
 
         //3
         if(cartaoProcurado.isEmpty()){
-            log.warn("[ALTERAÇÃO DE DATA DE VENCIMENTO DA FATURA] Cartão não encontrado: {}", numeroDoCartao);
+            log.warn("[ALTERAÇÃO DE DATA DE VENCIMENTO DA FATURA] Cartão não encontrado: {}", idCartao);
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                                 //4
                     .body(new StandardException(HttpStatus.NOT_FOUND.value(),
                             Arrays.asList("O cartão não foi encontrado")));
         }
 
+        final Cartao cartao = cartaoProcurado.get();
+
         ResponseEntity responseEntity =
-                client.comunicarAlteracaoDeVencimentoDeFaturas(numeroDoCartao, vencimentoDaFaturaRequest);
+                client.comunicarAlteracaoDeVencimentoDeFaturas(cartao.getNumeroDoCartao(), vencimentoDaFaturaRequest);
 
         //5
         if(!responseEntity.getStatusCode().is2xxSuccessful()){
-            log.warn("[ALTERAÇÃO DE DATA DE VENCIMENTO DA FATURA] Solicitação de mudança no vencimento do cartão negada, cartão: {}", numeroDoCartao);
+            log.warn("[ALTERAÇÃO DE DATA DE VENCIMENTO DA FATURA] Solicitação de mudança no vencimento do cartão negada, cartão: {}", idCartao);
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
                     .body(new StandardException(HttpStatus.UNPROCESSABLE_ENTITY.value(),
                             Arrays.asList("Alteração na data de vencimento do cartão negada")));
         }
 
-        final Cartao cartao = cartaoProcurado.get(0);
         cartao.alterarDiaDeVencimentoDaFatura(vencimentoDaFaturaRequest.getDia());
         entityManager.merge(cartao);
 

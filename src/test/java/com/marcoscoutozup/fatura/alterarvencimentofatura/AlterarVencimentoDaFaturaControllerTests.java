@@ -12,15 +12,12 @@ import org.springframework.http.ResponseEntity;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -46,9 +43,7 @@ public class AlterarVencimentoDaFaturaControllerTests {
     @Test
     @DisplayName("Deve retornar NotFound se cartão não for encontrado")
     public void deveRetornarNotFoundSeCartaoNaoForEncontrado(){
-        when(entityManager.createNamedQuery(anyString(), any())).thenReturn(query);
-        when(query.setParameter(anyString(), any())).thenReturn(query);
-        when(query.getResultList()).thenReturn(new ArrayList());
+        when(entityManager.find(any(), any())).thenReturn(null);
         ResponseEntity responseEntity = controller.alterarDataDeVencimentoDaFatura(UUID.randomUUID(), null);
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
         assertTrue(responseEntity.getBody() instanceof StandardException);
@@ -57,9 +52,7 @@ public class AlterarVencimentoDaFaturaControllerTests {
     @Test
     @DisplayName("Não deve alterar data de vencimento de faturas do cartão se sistema de cartões retornar erro")
     public void naoDeveAlterarDataDeVencimentoDeFaturasDoCartaoSeSistemaDeCartoesRetornarErro(){
-        when(entityManager.createNamedQuery(anyString(), any())).thenReturn(query);
-        when(query.setParameter(anyString(), any())).thenReturn(query);
-        when(query.getResultList()).thenReturn(Arrays.asList(new Cartao()));
+        when(entityManager.find(any(), any())).thenReturn(new Cartao());
         when(client.comunicarAlteracaoDeVencimentoDeFaturas(any(), any())).thenReturn(ResponseEntity.badRequest().build());
         ResponseEntity responseEntity = controller.alterarDataDeVencimentoDaFatura(UUID.randomUUID(), retornaVencimentoDaFaturaRequest());
         assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, responseEntity.getStatusCode());
@@ -69,9 +62,7 @@ public class AlterarVencimentoDaFaturaControllerTests {
     @Test
     @DisplayName("Deve modificar data de vencimento de faturas do cartão")
     public void deveModificarDataDeVencimentoDasFaturasDoCartao(){
-        when(entityManager.createNamedQuery(anyString(), any())).thenReturn(query);
-        when(query.setParameter(anyString(), any())).thenReturn(query);
-        when(query.getResultList()).thenReturn(Arrays.asList(new Cartao()));
+        when(entityManager.find(any(), any())).thenReturn(new Cartao());
         when(client.comunicarAlteracaoDeVencimentoDeFaturas(any(), any())).thenReturn(ResponseEntity.ok().build());
         ResponseEntity responseEntity = controller.alterarDataDeVencimentoDaFatura(UUID.randomUUID(), retornaVencimentoDaFaturaRequest());
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());

@@ -29,8 +29,8 @@ public class FaturaService {
 
         log.info("[PROCESSAMENTO DE FATURA] Processando fatura do mês {}, ano {} para o cartão {}", mesDaTransacao, anoDaTransacao, cartao.getNumeroDoCartao());
 
-        List<Fatura> respostaFatura = entityManager.createNamedQuery("findFaturaByCartaoAndData", Fatura.class)
-                .setParameter("numeroDoCartao", cartao.getNumeroDoCartao())
+        final List<Fatura> respostaFatura = entityManager.createNamedQuery("findFaturaByCartaoAndData", Fatura.class)
+                .setParameter("idCartao", cartao.getId())
                 .setParameter("mes", mesDaTransacao)
                 .setParameter("ano", anoDaTransacao)
                 .getResultList();

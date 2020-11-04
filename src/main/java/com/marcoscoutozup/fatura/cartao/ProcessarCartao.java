@@ -34,7 +34,7 @@ public class ProcessarCartao {
         if(respostaCartao.isEmpty()){
             cartao = cartaoResponseListener.toCartao();
             entityManager.persist(cartao);
-            log.info("Cartão não foi encontrado no sistema, salvando informações do cartão, Número do cartão: {}", cartao.getNumeroDoCartao());
+            log.info("Cartão não foi encontrado no sistema, salvando informações do cartão, cartão: {}", cartao.getId());
             return cartao;
         }
 

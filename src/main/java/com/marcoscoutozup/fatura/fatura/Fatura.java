@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 @Entity
 @NamedQuery(name = "findFaturaByCartaoAndData",
-        query = "select f from Fatura f where f.cartao.numeroDoCartao = :numeroDoCartao and mes = :mes and ano = :ano")
+        query = "select f from Fatura f where f.cartao.id = :idCartao and mes = :mes and ano = :ano")
 public class Fatura {
 
     @Id
@@ -80,8 +80,8 @@ public class Fatura {
         return transacoes.stream().limit(10).collect(Collectors.toSet());
     }
 
-    public boolean verificarSeCartaoPertenceAFatura(UUID numeroDoCartao){
-        return this.cartao.getNumeroDoCartao().equals(numeroDoCartao);
+    public boolean verificarSeCartaoPertenceAFatura(UUID idCartao){
+        return this.cartao.getId().equals(idCartao);
     }
 
     public boolean verificarSeFaturaEDoMesCorrente(){
@@ -90,5 +90,9 @@ public class Fatura {
 
     public UUID getId() {
         return id;
+    }
+
+    public UUID retornarNumeroDoCartao() {
+        return cartao.getNumeroDoCartao();
     }
 }
