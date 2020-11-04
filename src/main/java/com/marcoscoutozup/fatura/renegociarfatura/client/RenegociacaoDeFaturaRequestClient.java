@@ -1,22 +1,22 @@
-package com.marcoscoutozup.fatura.parcelarfatura.client;
+package com.marcoscoutozup.fatura.renegociarfatura.client;
 
-import com.marcoscoutozup.fatura.parcelarfatura.ParcelamentoDeFatura;
+import com.marcoscoutozup.fatura.renegociarfatura.RenegociacaoDeFatura;
 import org.springframework.util.Assert;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
-public class ParcelamentoDaFaturaRequestClient {
+public class RenegociacaoDeFaturaRequestClient {
 
     private UUID identificadorDaFatura;
     private Integer quantidade;
     private BigDecimal valor;
 
-    public ParcelamentoDaFaturaRequestClient(ParcelamentoDeFatura parcelamentoDeFatura) {
-        Assert.notNull(parcelamentoDeFatura, "A requisição de parcelamento de fatura não pode ser construída a partir de um parcelamento de fatura nulo");
-        this.identificadorDaFatura = parcelamentoDeFatura.getFatura().getId();
-        this.quantidade = parcelamentoDeFatura.getParcelas();
-        this.valor = parcelamentoDeFatura.getValorDaParcela();
+    public RenegociacaoDeFaturaRequestClient(RenegociacaoDeFatura renegociacaoDeFatura) {
+        Assert.notNull(renegociacaoDeFatura, "A requisição de negociação de fatura não pode ser construída a partir de uma renegociação de fatura nula");
+        this.identificadorDaFatura = renegociacaoDeFatura.getFatura().getId();
+        this.quantidade = renegociacaoDeFatura.getParcelas();
+        this.valor = renegociacaoDeFatura.getValorDaParcela();
     }
 
     public UUID getIdentificadorDaFatura() {

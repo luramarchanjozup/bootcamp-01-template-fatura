@@ -2,7 +2,6 @@ package com.marcoscoutozup.fatura.renegociarfatura;
 
 import com.marcoscoutozup.fatura.exceptions.StandardException;
 import com.marcoscoutozup.fatura.fatura.Fatura;
-import com.marcoscoutozup.fatura.parcelarfatura.ParcelamentoDeFatura;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -40,12 +39,15 @@ public class RenegociarFaturaControllerTests {
     @Mock
     private UriComponents components;
 
+    @Mock
+    private ComunicarSistemaExternoDaRenegociacao comunicarSistemaExternoDaRenegociacao;
+
     private RenegociarFaturaController controller;
 
     @BeforeEach
     public void setup(){
         initMocks(this);
-        controller = new RenegociarFaturaController(entityManager);
+        controller = new RenegociarFaturaController(entityManager, comunicarSistemaExternoDaRenegociacao);
     }
 
     @Test

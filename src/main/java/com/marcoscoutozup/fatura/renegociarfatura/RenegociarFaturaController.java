@@ -21,44 +21,48 @@ import java.util.UUID;
 public class RenegociarFaturaController {
 
     private final EntityManager entityManager;
+    private final ComunicarSistemaExternoDaRenegociacao comunicarSistemaExternoDaRenegociacao; //1
     private final Logger log = LoggerFactory.getLogger(RenegociarFaturaController.class);
 
-    public RenegociarFaturaController(EntityManager entityManager) {
+    public RenegociarFaturaController(EntityManager entityManager, ComunicarSistemaExternoDaRenegociacao comunicarSistemaExternoDaRenegociacao) {
         this.entityManager = entityManager;
+        this.comunicarSistemaExternoDaRenegociacao = comunicarSistemaExternoDaRenegociacao;
     }
 
     @PostMapping("/{numeroDoCartao}/faturas/{idFatura}/renegociar")
     @Transactional
     public ResponseEntity renegociarFatura(@PathVariable UUID numeroDoCartao,
                                            @PathVariable UUID idFatura,
-                                                                //1
+                                                                //2
                                            @RequestBody @Valid RenegociacaoDeFaturaRequest renegociacao,
                                            UriComponentsBuilder uri){
 
-                        //2
+                        //3
         final Optional<Fatura> faturaProcurada = Optional.ofNullable(entityManager.find(Fatura.class, idFatura));
 
-        //3
+        //4
         if(faturaProcurada.isEmpty()){
             log.warn("Fatura não encontrada, Id: {}", idFatura);
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                                //4
+                                //5
                     .body(new StandardException(HttpStatus.NOT_FOUND.value(), Arrays.asList("Fatura não encontrada")));
         }
 
         Fatura fatura = faturaProcurada.get();
 
-        //5
+        //6
         if(!fatura.verificarSeCartaoPertenceAFatura(numeroDoCartao)){
             log.warn("Fatura não pertence ao cartão, Número Do Cartão: {}", idFatura);
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
                     .body(new StandardException(HttpStatus.UNPROCESSABLE_ENTITY.value(), Arrays.asList("Fatura não pertence ao cartão")));
         }
 
-        //6
+        //7
         RenegociacaoDeFatura renegociacaoDeFatura = renegociacao.toRenegociacaoDeFatura();
         renegociacaoDeFatura.associarFaturaComRenegociacao(fatura);
         entityManager.persist(renegociacaoDeFatura);
+
+        comunicarSistemaExternoDaRenegociacao.comunicarSistemaExternoSobreParcelamentoDeFatura(numeroDoCartao, renegociacaoDeFatura);
 
         return ResponseEntity.created(uri.path("/cartoes/{id}/renegociacoes")
                 .buildAndExpand(renegociacaoDeFatura.getId())
