@@ -25,18 +25,21 @@ public class FaturaServiceTests {
     @Test
     @DisplayName("Deve lançar exceção se cartão for nulo")
     public void deveLancarExcecaoSeCartaoForNulo(){
-        assertThrows(IllegalArgumentException.class, () -> faturaService.verificarExistenciaDeFatura(null, 1, 1));
+        assertThrows(IllegalArgumentException.class,
+                () -> faturaService.verificarExistenciaDeFatura(null, 1, 1));
     }
 
     @Test
     @DisplayName("Deve lançar exceção se mês da transação for nulo")
     public void deveLancarExcecaoSeMesDaTransacaoForNulo(){
-        assertThrows(IllegalArgumentException.class, () -> faturaService.verificarExistenciaDeFatura(new Cartao(), null, 1));
+        assertThrows(IllegalArgumentException.class,
+                () -> faturaService.verificarExistenciaDeFatura(new Cartao(), null, 1));
     }
 
     @Test
     @DisplayName("Deve lançar exceção se ano da transação for nulo")
     public void deveLancarExcecaoSeAnoDaTransacaoForNulo(){
-        assertThrows(IllegalArgumentException.class, () -> faturaService.verificarExistenciaDeFatura(new Cartao(), 1, null));
+        assertThrows(IllegalArgumentException.class,
+                () -> faturaService.verificarExistenciaDeFatura(new Cartao(), 1, null));
     }
 }

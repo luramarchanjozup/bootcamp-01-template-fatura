@@ -18,13 +18,15 @@ public class RenegociarFaturaTests {
     @Test
     @DisplayName("Deve lançar exceção ao associar fatura à renegociação se fatura for nula")
     public void deveLancarExcecaoAoAssociarFaturaARenegociacaoSeFaturaForNula(){
-        assertThrows(IllegalArgumentException.class, () -> renegociacaoDeFatura.associarFaturaComRenegociacao(null));
+        assertThrows(IllegalArgumentException.class,
+                () -> renegociacaoDeFatura.associarFaturaComRenegociacao(null));
     }
 
     @Test
     @DisplayName("Deve lançar exceção ao mudar o status da negociação se o mesmo for nulo")
     public void deveLancarExcecaoAoMudarStatusDaNegociacaoSeOMesmoForNulo(){
-        assertThrows(IllegalArgumentException.class, () -> renegociacaoDeFatura.mudarStatusDaRenegociacao(null));
+        assertThrows(IllegalArgumentException.class,
+                () -> renegociacaoDeFatura.mudarStatusDaRenegociacao(null));
     }
 
 }

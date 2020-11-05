@@ -74,4 +74,20 @@ public class ConsultarFaturaControllerTests {
         assertTrue(responseEntity.getBody() instanceof StandardException);
     }
 
+    @Test
+    @DisplayName("Deve retornar detalhes da fatura")
+    public void deveRetornarDetalhesDaFatura(){
+        when(entityManager.createNamedQuery(anyString(), eq(Cartao.class))).thenReturn(queryCartao);
+        when(queryCartao.setParameter(anyString(), any())).thenReturn(queryCartao);
+        when(queryCartao.getResultList()).thenReturn(List.of(new Cartao()));
+
+        when(entityManager.createNamedQuery(anyString(), eq(Fatura.class))).thenReturn(queryFatura);
+        when(queryFatura.setParameter(anyString(), any())).thenReturn(queryFatura);
+        when(queryFatura.getResultList()).thenReturn(List.of(new Fatura()));
+
+        ResponseEntity responseEntity = controller.buscarDetalhesDaFatura(UUID.randomUUID(), new Random().nextInt(), new Random().nextInt());
+        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+        assertTrue(responseEntity.getBody() instanceof StandardException);
+    }
+
 }

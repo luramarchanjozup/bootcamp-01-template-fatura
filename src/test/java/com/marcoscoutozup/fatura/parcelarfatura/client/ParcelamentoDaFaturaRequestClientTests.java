@@ -10,6 +10,7 @@ public class ParcelamentoDaFaturaRequestClientTests {
     @Test
     @DisplayName("Não deve construir a request para o client de parcelamento de fatura se o parcelamento for nulo")
     public void naoDeveContruirARequestParaOClientDeParcelamentoDeFaturaSeOParcelamentoForNulo(){
-        assertThrows(IllegalArgumentException.class, () -> new ParcelamentoDaFaturaRequestClient(null));
+        assertThrows(IllegalArgumentException.class,
+                () -> new ParcelamentoDaFaturaRequestClient(null));
     }
 }

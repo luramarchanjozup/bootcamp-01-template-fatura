@@ -10,6 +10,7 @@ public class RenegociacaoDeFaturaRequestClientTests {
     @Test
     @DisplayName("Não deve construir a request para o client de renegociacao de fatura se a renegociação for nula")
     public void naoDeveContruirARequestParaOClientDeRenegociacaoDeFaturaSeARenegociacaoForNula(){
-        assertThrows(IllegalArgumentException.class, () -> new RenegociacaoDeFaturaRequestClient(null));
+        assertThrows(IllegalArgumentException.class,
+                () -> new RenegociacaoDeFaturaRequestClient(null));
     }
 }

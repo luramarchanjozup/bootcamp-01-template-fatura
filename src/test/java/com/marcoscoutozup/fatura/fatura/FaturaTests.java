@@ -18,13 +18,15 @@ public class FaturaTests {
     @Test
     @DisplayName("Deve lançar exceção ao adicionar transação nula")
     public void deveLancarExcecaoAoAdicionarTransacaoNula(){
-        assertThrows(IllegalArgumentException.class, () -> fatura.adicionarTransacaoNaFatura(null));
+        assertThrows(IllegalArgumentException.class,
+                () -> fatura.adicionarTransacaoNaFatura(null));
     }
 
     @Test
     @DisplayName("Deve lançar exceção ao calcular total da fatura com transações nulas")
     public void deveLancarExcecaoAoCalcularTotalDaFaturaComTransacoesNulas(){
-        assertThrows(IllegalArgumentException.class, () -> fatura.calcularTotalDaFatura());
+        assertThrows(IllegalArgumentException.class,
+                () -> fatura.calcularTotalDaFatura());
     }
 
 }

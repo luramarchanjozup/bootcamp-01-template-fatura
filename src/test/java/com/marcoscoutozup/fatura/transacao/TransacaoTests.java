@@ -10,6 +10,7 @@ public class TransacaoTests {
     @Test
     @DisplayName("Deve lançar exceção se lista de transações para response for nula")
     public void deveLancarExcecaoSeListaDeTransacoesParaResponseForNula(){
-        assertThrows(IllegalArgumentException.class, () -> Transacao.toResponseSet(null));
+        assertThrows(IllegalArgumentException.class,
+                () -> Transacao.toResponseSet(null));
     }
 }

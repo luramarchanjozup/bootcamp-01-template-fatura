@@ -20,13 +20,15 @@ public class ParcelarFaturaTests {
     @Test
     @DisplayName("Deve lançar exceção ao associar fatura ao parcelamento se fatura for nula")
     public void deveLancarExcecaoAoAssociarFaturaAoParcelamentoSeFaturaForNula(){
-        assertThrows(IllegalArgumentException.class, () -> parcelamentoDeFatura.relacionarFaturaAoParcelamento(null));
+        assertThrows(IllegalArgumentException.class,
+                () -> parcelamentoDeFatura.relacionarFaturaAoParcelamento(null));
     }
 
     @Test
     @DisplayName("Deve lançar exceção ao mudar o status de pagamento se o status for nulo")
     public void deveLancarExcecaoAoMudarStatusDePagamentoSeOStatusForNulo(){
-        assertThrows(IllegalArgumentException.class, () -> parcelamentoDeFatura.mudarStatusDoParcelamento(null));
+        assertThrows(IllegalArgumentException.class,
+                () -> parcelamentoDeFatura.mudarStatusDoParcelamento(null));
     }
 
 }

@@ -24,7 +24,8 @@ public class TransacaoListenerTests {
     @Test
     @DisplayName("Deve lançar exceção se resposta de mensageria for nula")
     public void deveLancaoExcecaoSeRespostaDeMensageriaForNula(){
-        assertThrows(IllegalArgumentException.class, () -> listener.ouvirTransacoesDaMensageria(null));
+        assertThrows(IllegalArgumentException.class,
+                () -> listener.ouvirTransacoesDaMensageria(null));
     }
 
 }
