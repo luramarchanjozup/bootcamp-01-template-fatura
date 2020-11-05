@@ -7,7 +7,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,12 +37,12 @@ public class ConsultarFaturaControllerTests {
     @Mock
     private Fatura fatura;
 
-    private ConsultarFaturaCorrenteController controller;
+    private ConsultarFaturaController controller;
 
     @BeforeEach
     public void setup(){
         MockitoAnnotations.initMocks(this);
-        controller = new ConsultarFaturaCorrenteController(entityManager);
+        controller = new ConsultarFaturaController(entityManager);
     }
 
     @Test
