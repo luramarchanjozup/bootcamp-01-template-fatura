@@ -17,6 +17,7 @@ import java.net.URI;
 import java.util.Optional;
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -55,8 +56,8 @@ public class RenegociarFaturaControllerTests {
     public void deveRetornarNotFoundSeNaoForEncontradaAFatura(){
         when(entityManager.find(any(), any())).thenReturn(null);
         ResponseEntity responseEntity = controller.renegociarFatura(UUID.randomUUID(), null, null, null);
-        Assertions.assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
-        Assertions.assertTrue(responseEntity.getBody() instanceof StandardException);
+        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+        assertTrue(responseEntity.getBody() instanceof StandardException);
     }
 
     @Test
@@ -65,8 +66,8 @@ public class RenegociarFaturaControllerTests {
         when(entityManager.find(any(), any())).thenReturn(fatura);
         when(Optional.of(fatura).get().verificarSeCartaoPertenceAFatura(any())).thenReturn(false);
         ResponseEntity responseEntity = controller.renegociarFatura(UUID.randomUUID(), UUID.randomUUID(), null, null);
-        Assertions.assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, responseEntity.getStatusCode());
-        Assertions.assertTrue(responseEntity.getBody() instanceof StandardException);
+        assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, responseEntity.getStatusCode());
+        assertTrue(responseEntity.getBody() instanceof StandardException);
     }
 
     @Test
@@ -79,8 +80,8 @@ public class RenegociarFaturaControllerTests {
         when(uri.buildAndExpand((Object) any())).thenReturn(components);
         when(components.toUri()).thenReturn(URI.create(""));
         ResponseEntity responseEntity = controller.renegociarFatura(UUID.randomUUID(), UUID.randomUUID(), request, uri);
-        Assertions.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-        Assertions.assertTrue(responseEntity.getHeaders().containsKey("Location"));
+        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+        assertTrue(responseEntity.getHeaders().containsKey("Location"));
     }
 
 

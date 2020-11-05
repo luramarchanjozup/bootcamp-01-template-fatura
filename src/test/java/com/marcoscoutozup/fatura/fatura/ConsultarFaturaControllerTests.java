@@ -18,10 +18,12 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.*;
 
 public class ConsultarFaturaControllerTests {
 
@@ -41,7 +43,7 @@ public class ConsultarFaturaControllerTests {
 
     @BeforeEach
     public void setup(){
-        MockitoAnnotations.initMocks(this);
+        initMocks(this);
         controller = new ConsultarFaturaController(entityManager);
     }
 
@@ -52,8 +54,8 @@ public class ConsultarFaturaControllerTests {
         when(queryCartao.setParameter(anyString(), any())).thenReturn(queryCartao);
         when(queryCartao.getResultList()).thenReturn(new ArrayList());
         ResponseEntity responseEntity = controller.processarConsultarDeFatura(UUID.randomUUID(), null, null);
-        Assertions.assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
-        Assertions.assertTrue(responseEntity.getBody() instanceof StandardException);
+        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+        assertTrue(responseEntity.getBody() instanceof StandardException);
     }
 
     @Test
@@ -68,8 +70,8 @@ public class ConsultarFaturaControllerTests {
         when(queryFatura.getResultList()).thenReturn(new ArrayList());
 
         ResponseEntity responseEntity = controller.buscarDetalhesDaFatura(UUID.randomUUID(), new Random().nextInt(), new Random().nextInt());
-        Assertions.assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
-        Assertions.assertTrue(responseEntity.getBody() instanceof StandardException);
+        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+        assertTrue(responseEntity.getBody() instanceof StandardException);
     }
 
 }
