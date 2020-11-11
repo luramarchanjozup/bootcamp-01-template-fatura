@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    version: v1
+    app: fatura
+    team: cartao-branco
+  name: fatura
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fatura
+  template:
+    metadata:
+      labels:
+        app: fatura
+        version: v1
+    spec:
+      containers:
+        - image: marcoscoutozup/fatura:latest
+          imagePullPolicy: Always
+          name: fatura
+          envFrom:
+            - configMapRef:
+                name: fatura-config
+
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "700m"
+            limits:
+              memory: "512Mi"
+              cpu: "900m"
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 3333
+              scheme: HTTP
+            initialDelaySeconds: 60
+
+          ports:
+            - containerPort: 3333
+              name: http
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 3333
+              scheme: HTTP
+            initialDelaySeconds: 60
+#          env:
+#            - name: TOKEN_VAULT
+#              valueFrom:
+#                secretKeyRef:
+#                    name: fatura-secret
+#                    key: token-vault
