@@ -1,0 +1,53 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/fatura
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        temp:
+          use_jdbc_metadata_defaults: false
+    show-sql: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_ISSUER_URI:http://localhost:18080/auth/realms/nosso-cartao}
+          jwk-set-uri: ${KEYCLOAK_JWKS_URI:http://localhost:18080/auth/realms/nosso-cartao/protocol/openid-connect/certs}
+  application:
+    name: transacao
+  kafka:
+    bootstrap-servers: ${KAFKA_HOST:localhost:9092}
+    consumer:
+      auto-offset-reset: ${KAFKA_AUTO-OFFSET-RESET:latest}
+      group-id: ${KAFKA_CONSUMER_GROUP_ID:minha-aplicacao}
+      key-deserializer: org.apache.kafka.common.serialization.StringSerializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+    topic:
+      transactions: transacoes
+
+#Urls de servicos externos
+servicos-externos:
+  cartoes: http://localhost:8888
+
+#timeouts do Feign
+feign:
+  client:
+    config:
+      analise-proposta:
+        connect-timeout: 1000
+        read-timeout: 1000
+
+# Jaeger
+opentracing:
+  jaeger:
+    enabled: ${JAEGER_ENABLED:true}
+    http-sender:
+      url: ${JAEGER_ENDPOINT:http://localhost:14268/api/traces}
+    probabilistic-sampler:
+      sampling-rate: ${JAEGER_SAMPLER:1}
+    service-name: ${spring.application.name}
